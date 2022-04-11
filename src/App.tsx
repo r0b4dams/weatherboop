@@ -1,11 +1,20 @@
-import React, { useState } from "react";
-import MapBox from "./MapBox";
+import React, { useReducer } from "react";
+import MapBox from "./components/MapBox";
+import SideBar from "./components/SideBar";
+import AppReducer from "./store/reducer";
+import INITIAL_STATE from "./store/init";
+
+import mapboxgl from "mapbox-gl";
+import MAPBOXGL_ACCESS_TOKEN from "./utils/token";
+mapboxgl.accessToken = MAPBOXGL_ACCESS_TOKEN;
 
 const App = () => {
+  const [state, dispatch] = useReducer(AppReducer, INITIAL_STATE);
   return (
-    <div>
-      <MapBox />
-    </div>
+    <>
+      <SideBar lng={state.lng} lat={state.lat} zoom={state.zoom} />
+      <MapBox state={state} dispatch={dispatch} />
+    </>
   );
 };
 
