@@ -1,9 +1,10 @@
-import react from '@vitejs/plugin-react'
-import ssr from 'vite-plugin-ssr/plugin'
-import { UserConfig } from 'vite'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-const config: UserConfig = {
-  plugins: [react(), ssr()]
-}
-
-export default config
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    minify: false,
+  },
+});

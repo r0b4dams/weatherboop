@@ -1,20 +1,29 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "module": "ES2020",
-    "target": "ES2020",
-    "moduleResolution": "Node",
+    "allowJs": true,
+    "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vite/client"],
-    "jsx": "react",
+    "strict": true,
+    "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "sourceMap": true,
+    "target": "ES2017"
   },
+  "include": ["src/**/*", "types/*", "index.ts", "node_modules/vite/types/*"],
   "ts-node": {
     "transpileOnly": true,
-    "esm": true,
     "compilerOptions": {
-      "moduleResolution": "Node16"
+      "module": "CommonJS"
     }
   }
 }
