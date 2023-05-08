@@ -42,10 +42,13 @@ const indexHtml = fs.readFileSync(
       const template = await vite.transformIndexHtml(url, indexHtml);
       const ctx = { url: "" };
       const appHtml = template.replace(`<!--app-->`, await render(url, ctx));
+
+      // <Redirect> rendered
       if (ctx.url) {
-        res.redirect(301, ctx.url); // Somewhere a `<Redirect>` was rendered
+        res.redirect(301, ctx.url);
         return;
       }
+
       res.status(200).set({ "Content-Type": "text/html" }).send(appHtml);
     } catch (err) {
       if (err instanceof Error) {
