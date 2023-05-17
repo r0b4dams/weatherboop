@@ -19,7 +19,7 @@
     "sourceMap": true,
     "target": "ES2017"
   },
-  "include": ["src/**/*", "types/*", "index.ts", "node_modules/vite/types/*"],
+  "include": ["src/**/*", "node_modules/vite/types/*"],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {

@@ -2,8 +2,9 @@ import fs from "fs";
 import path from "path";
 import express from "express";
 import compression from "compression";
-import serveStatic from "serve-static";
+// import serveStatic from "serve-static";
 import { createServer } from "vite";
+import { api } from "./api";
 
 // example
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
@@ -12,14 +13,9 @@ const resolve = (p: string) => path.resolve(__dirname, p);
 
 const port = process.env.PORT || 7456;
 const isProd = process.env.NODE_ENV === "production";
-const DEV = path.join(__dirname, "./src/client/entry-server.tsx");
-const PROD = path.join(__dirname, "./dist/server/entry-server.js");
-const SSR_ENTRY = isProd ? PROD : DEV;
+const DEV = path.join(__dirname, "entry-server.tsx");
 
-const indexHtml = fs.readFileSync(
-  isProd ? resolve("dist/client/index.html") : resolve("index.html"),
-  "utf-8",
-);
+const indexHtml = fs.readFileSync(isProd ? "" : "index.html", "utf-8");
 
 (async () => {
   const app = express();
@@ -28,19 +24,21 @@ const indexHtml = fs.readFileSync(
     appType: "custom",
     server: { middlewareMode: true },
   });
-  app.use(vite.middlewares);
-  app.use(compression());
 
-  if (isProd) {
-    app.use(serveStatic(resolve("dist/client"), { index: false }));
-  }
+  app.use(vite.middlewares);
+  app.use(express.json());
+  app.use(compression());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.static(path.join(__dirname, "public")));
+  app.use("/api", api);
 
   app.use("*", async (req, res, next) => {
     try {
       const url = req.originalUrl;
-      const { render } = await vite.ssrLoadModule(SSR_ENTRY);
-      const template = await vite.transformIndexHtml(url, indexHtml);
       const ctx = { url: "" };
+
+      const { render } = await vite.ssrLoadModule(DEV);
+      const template = await vite.transformIndexHtml(url, indexHtml);
       const appHtml = template.replace(`<!--app-->`, await render(url, ctx));
 
       // <Redirect> rendered

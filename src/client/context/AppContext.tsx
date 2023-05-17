@@ -1,19 +1,24 @@
 import React, { useContext, useState } from "react";
 
-export interface Context {
+interface Context {
   name: string;
   setName: (val: string) => void;
 }
-const defaultVal = {
+
+interface ContextProps {
+  children: React.ReactNode;
+}
+
+const init = {
   name: "",
   setName: () => {},
 } as Context;
 
-const context = React.createContext(defaultVal);
+const context = React.createContext(init);
 const { Provider } = context;
 
-export const ContextWrapper = ({ children }: { children: any }) => {
-  const [name, setName] = useState(defaultVal.name);
+export const AppContext: React.FC<ContextProps> = ({ children }) => {
+  const [name, setName] = useState(init.name);
   return <Provider value={{ name, setName }}>{children}</Provider>;
 };
 
