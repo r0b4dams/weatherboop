@@ -9,7 +9,7 @@
   "author": "Robert Adams",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts",
+    "dev": "nodemon --exec ts-node src",
     "prod": "",
     "build": "yarn clear && tsc",
     "clear": "rimraf dist"
