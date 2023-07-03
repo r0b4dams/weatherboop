@@ -10,8 +10,8 @@ import { flyToBoop, updateBoop, updateCoords } from "./handlers";
 import { selectMap } from "../../store/map/selectors";
 import { getWeather } from "../../store/map/thunks";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiY29tYXRvc2lubyIsImEiOiJjbDFyeW5lNngwYnhwM2NybDhuM2hoOHdtIn0.1lW0Js4LKuMX1SFCzP5J5w";
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
+// "pk.eyJ1IjoiY29tYXRvc2lubyIsImEiOiJjbDFyeW5lNngwYnhwM2NybDhuM2hoOHdtIn0.1lW0Js4LKuMX1SFCzP5J5w";
 
 export const Mapbox: React.FC = () => {
   const map = useRef<mapboxgl.Map | null>(null);
