@@ -13,27 +13,17 @@ logs
 results
 tmp
 
-# Build
-public/css/main.css
+# build
+dist
 
-# Coverage reports
+# reports
 coverage
 
-# API keys and secrets
+# secrets
 .env
 
-# Dependency directory
+# dependencies
 node_modules
-bower_components
-
-# Editors
-.idea
-*.iml
 
 # OS metadata
 .DS_Store
-Thumbs.db
-
-# Ignore built ts files
-dist/**/*
-

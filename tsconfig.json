@@ -1,25 +1,27 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    // "allowJs": true,
     "alwaysStrict": true,
-    "allowSyntheticDefaultImports": true,
+    // "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "declaration": true,
-    "declarationMap": true,
+    // "declaration": true,
+    // "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "incremental": true,
+    // "incremental": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "strict": true,
+    "rootDir": "src",
     "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "Node",
     "skipLibCheck": true,
-    "sourceMap": true,
-    "target": "ES2017"
+    // "sourceMap": true,
+    "target": "ES2017",
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["src/**/*", "node_modules/vite/types/*"],
+  "include": ["src/**/*", "node_modules/vite/types/*", "**.d.ts"],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
