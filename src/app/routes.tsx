@@ -13,7 +13,7 @@ const routes = Object.entries(pages).map(([path, module]) => {
   };
 });
 
-export const Router: React.FC = () => {
+const Router: React.FC = () => {
   return (
     <Routes>
       {routes.map(({ name, path, Page }) => (
