@@ -12,6 +12,8 @@
     "dev": "nodemon src/index.ts",
     "prod": "",
     "build": "yarn clear && tsc",
+    "build:client": "vite build --outDir dist/client",
+    "build:server": "vite build --outDir dist/server --ssr build/entry-server.js",
     "clear": "rimraf dist"
   },
   "dependencies": {
