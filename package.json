@@ -8,12 +8,14 @@
   },
   "author": "Robert Adams",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.ts",
-    "prod": "",
+    "dev": "nodemon --experimental-specifier-resolution=node src/index.ts",
+    "preview": "yarn build && node --experimental-specifier-resolution=node js",
+    "transpile": "tsc",
     "build": "yarn clear && tsc",
-    "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --outDir dist/server --ssr build/entry-server.js",
+    "build:client": "cd js && vite build --outDir dist/client",
+    "build:server": "cd js && vite build --outDir dist/server --ssr dist/entry-server.js",
     "clear": "rimraf dist"
   },
   "dependencies": {
@@ -41,6 +43,7 @@
     "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
+    "nodemon": "^3.0.1",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
