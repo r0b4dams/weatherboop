@@ -13,27 +13,30 @@ import { type Connect } from "vite";
 
 const PRODUCTION = process.env.NODE_ENV === "production";
 const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url));
-const SERVER_ENTRY = path.join(DIRNAME, `entry-server`);
+const SSR = path.join(DIRNAME, "ssr");
 
 console.log({
   NODE_ENV: process.env.NODE_ENV,
   PRODUCTION,
   DIRNAME,
-  SERVER_ENTRY,
+  SSR,
 });
 
 (async () => {
   const app = express();
   const { render, middlewares } = await init();
 
-  if (!PRODUCTION) {
+  console.log(path.join(DIRNAME, "client"));
+
+  if (PRODUCTION) {
+    app.use(express.static(path.join(DIRNAME, "client"), { index: false }));
+  } else {
     app.use(middlewares!);
     app.use(logger);
   }
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use(express.static(path.join(DIRNAME, "public")));
   app.use("/api", api);
   app.use(render);
 
@@ -58,7 +61,7 @@ async function development() {
     appType: "custom",
     server: { middlewareMode: true },
   });
-  const ssr = await ssrLoadModule(path.join(DIRNAME, "entry-server"));
+  const ssr = await ssrLoadModule(path.join(DIRNAME, "ssr"));
 
   const render: RequestHandler = async (req, res, next) => {
     const url = req.originalUrl;
@@ -80,8 +83,8 @@ async function development() {
 }
 
 async function production() {
-  const ssr = await import("./entry-server");
-  const template = await fs.readFile("index.html", "utf-8");
+  const ssr = await import("./ssr");
+  const template = await fs.readFile("dist/client/index.html", "utf-8");
 
   const render: RequestHandler = async (req, res) => {
     const url = req.originalUrl;

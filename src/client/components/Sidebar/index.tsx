@@ -1,9 +1,7 @@
-import { useAppSelector } from "../../store/hooks";
-import { selectMap } from "../../store/map/selectors";
-
 export const Sidebar: React.FC = () => {
-  const { lat, lon, zoom } = useAppSelector(selectMap);
-
+  const lat = 9;
+  const lon = 9;
+  const zoom = 99;
   return (
     <div
       style={{

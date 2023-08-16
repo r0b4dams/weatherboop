@@ -13,7 +13,7 @@ const routes = Object.entries(pages).map(([path, module]) => {
   };
 });
 
-const Router: React.FC = () => {
+export default () => {
   return (
     <Routes>
       {routes.map(({ name, path, Page }) => (
@@ -22,5 +22,3 @@ const Router: React.FC = () => {
     </Routes>
   );
 };
-
-export default Router;
