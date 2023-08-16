@@ -1,7 +1,8 @@
+import { useAppContext } from "../../store";
+
 export const Sidebar: React.FC = () => {
-  const lat = 9;
-  const lon = 9;
-  const zoom = 99;
+  const { state } = useAppContext();
+
   return (
     <div
       style={{
@@ -17,7 +18,7 @@ export const Sidebar: React.FC = () => {
         borderRadius: "4px",
       }}
     >
-      Latitude: {lat} | Longitude: {lon} | Zoom: {zoom}
+      Latitude: {state.lat} | Longitude: {state.lng} | Zoom: {state.zoom}
     </div>
   );
 };

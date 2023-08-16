@@ -13,20 +13,18 @@
     "dev": "node entry ts && nodemon --experimental-specifier-resolution=node src/index.ts",
     "dev:js": "node entry js && yarn clear && tsc && set NODE_ENV=development&& node --experimental-specifier-resolution=node js",
     "prod": "set NODE_ENV=production&& node --experimental-specifier-resolution=node dist",
-    "build": "node entry js && yarn clear && tsc && yarn build:server && yarn build:client && bash copy_files.sh && rimraf js",
+    "build": "node entry js && yarn clear && tsc && yarn build:server && yarn build:client && bash copy_files.sh",
     "build:server": "vite build --outDir dist --ssr js/ssr.js",
     "build:client": "vite build --outDir dist/client",
     "clear": "rimraf js && rimraf dist"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
     "compression": "1.7.4",
     "dotenv": "^16.3.1",
     "express": "4.18.2",
     "mapbox-gl": "^2.14.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.1.0",
     "react-router-dom": "^6.10.0"
   },
   "devDependencies": {

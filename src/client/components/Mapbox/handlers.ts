@@ -1,4 +1,5 @@
-// import type { EventData, Map, MapMouseEvent, Marker } from "mapbox-gl";
+import type { EventData, Map, MapMouseEvent, Marker } from "mapbox-gl";
+import { setLat, setLng, setZoom } from "../../store/actions";
 // import { AppDispatch } from "../../store";
 // import { setLat, setLon, setZoom } from "../../store/map";
 
@@ -34,3 +35,14 @@
 //     console.error(error);
 //   }
 // };
+
+export const updateCoordinates = (map: Map, dispatch: AppDispatch) => () => {
+  const lng = parseFloat(map.getCenter().lng.toFixed(2));
+  const lat = parseFloat(map.getCenter().lat.toFixed(2));
+  const zoom = parseFloat(map.getZoom().toFixed(2));
+
+  console.log({ lng, lat, zoom });
+//   dispatch(setLng(parseFloat(map.getCenter().lng.toFixed(2))));
+//   dispatch(setLat(parseFloat(map.getCenter().lat.toFixed(2))));
+//   dispatch(setZoom(parseFloat(map.getZoom().toFixed(2))));
+};

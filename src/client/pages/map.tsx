@@ -1,12 +1,10 @@
 import { Mapbox, Sidebar } from "../components";
 
-const MapPage: React.FC = () => {
+export default function Map() {
   return (
     <>
       <Sidebar />
       <Mapbox />
     </>
   );
-};
-
-export default MapPage;
+}

@@ -1,5 +1,10 @@
 import Routes from "./routes";
+import { AppProvider } from "./store";
 
 export const Client: React.FC = () => {
-  return <Routes />;
+  return (
+    <AppProvider>
+      <Routes />
+    </AppProvider>
+  );
 };

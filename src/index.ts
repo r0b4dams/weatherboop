@@ -11,22 +11,25 @@ import { logger } from "./middleware";
 import { type RequestHandler } from "express";
 import { type Connect } from "vite";
 
-const PRODUCTION = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === "production";
+
+const PORT = process.env.PORT || 3050;
 const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url));
-const SSR = path.join(DIRNAME, "ssr");
+const SSR = path.resolve(DIRNAME, "ssr");
 
 console.log({
-  PRODUCTION,
+  isProd,
+  ENV: process.env.NODE_ENV,
   DIRNAME,
   SSR,
 });
 
 (async () => {
   const app = express();
-  const { render, middlewares } = await init();
+  const { render, middlewares } = await init(isProd);
 
-  if (PRODUCTION) {
-    app.use(express.static(path.join(DIRNAME, "client"), { index: false }));
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.resolve(DIRNAME, "client"), { index: false }));
   } else {
     app.use(middlewares!);
     app.use(logger);
@@ -36,16 +39,16 @@ console.log({
   app.use("/api", api);
   app.use(render);
 
-  app.listen(3002, () => {
-    console.log(`App is listening on http://localhost:${3002}`);
+  app.listen(PORT, () => {
+    console.log(`App is listening on http://localhost:${PORT}`);
   });
 })();
 
-function init(): Promise<{
+function init(prod = false): Promise<{
   render: RequestHandler;
   middlewares?: Connect.Server;
 }> {
-  return PRODUCTION ? production() : development();
+  return prod ? production() : development();
 }
 
 async function development() {
@@ -55,7 +58,7 @@ async function development() {
     appType: "custom",
     server: { middlewareMode: true },
   });
-  const ssr = await ssrLoadModule(path.join(DIRNAME, "ssr"));
+  const ssr = await ssrLoadModule(path.resolve(DIRNAME, "ssr"));
 
   const render: RequestHandler = async (req, res, next) => {
     const url = req.originalUrl;
@@ -78,7 +81,7 @@ async function development() {
 
 async function production() {
   const ssr = await import("./ssr");
-  const template = await fs.readFile("dist/client/index.html", "utf-8");
+  const template = await fs.readFile(path.join(DIRNAME, "client", "index.html"), "utf-8");
 
   const render: RequestHandler = async (req, res) => {
     const url = req.originalUrl;
