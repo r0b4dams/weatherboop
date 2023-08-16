@@ -5,7 +5,6 @@ const router = Router();
 const query_config = {
   appid: process.env.OPENWEATHERMAP_KEY,
   units: "imperial",
-  exclude: "minutely,hourly",
 };
 
 const buildQueryParams = ({ lat, lon }: any) => {
@@ -25,7 +24,7 @@ const buildQueryParams = ({ lat, lon }: any) => {
 router.get("/", async (req, res, next) => {
   try {
     const { lat, lon } = req.query;
-    const url = "https://api.openweathermap.org/data/2.5/onecall";
+    const url = "https://api.openweathermap.org/data/2.5/weather";
     const params = buildQueryParams({ lat, lon });
     const response = await fetch(url + params);
     const data = await response.json();

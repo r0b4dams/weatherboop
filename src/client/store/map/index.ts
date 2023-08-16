@@ -1,6 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-
+import * as rtk from "@reduxjs/toolkit";
 import { updateWeather } from "./thunks";
 import { MapState } from "./types";
 
@@ -12,17 +10,17 @@ const initialState = {
   error: null,
 } as MapState;
 
-export const mapSlice = createSlice({
+export const mapSlice = rtk.createSlice({
   name: "map",
   initialState,
   reducers: {
-    setLat: (state, action: PayloadAction<number>) => {
+    setLat: (state, action: rtk.PayloadAction<number>) => {
       state.lat = action.payload;
     },
-    setLon: (state, action: PayloadAction<number>) => {
+    setLon: (state, action: rtk.PayloadAction<number>) => {
       state.lon = action.payload;
     },
-    setZoom: (state, action: PayloadAction<number>) => {
+    setZoom: (state, action: rtk.PayloadAction<number>) => {
       state.zoom = action.payload;
     },
   },

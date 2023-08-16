@@ -1,16 +1,16 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import * as rtk from "@reduxjs/toolkit";
 
 import map from "./map";
 
-export const store = configureStore({
+export const store = rtk.configureStore({
   reducer: { map },
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
+export type AppThunk<ReturnType = void> = rtk.ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  Action<string>
+  rtk.Action<string>
 >;

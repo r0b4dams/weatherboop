@@ -10,9 +10,9 @@
     "strict": true,
     "outDir": "js",
     "module": "ESNext",
+    "target": "ESNext",
     "moduleResolution": "Node",
     "skipLibCheck": true,
-    "target": "ES2017",
     "noEmitOnError": true,
     "types": ["vite/client"]
   },
@@ -20,6 +20,6 @@
   "exclude": ["vite.config.ts"],
   "ts-node": {
     "transpileOnly": true,
-    "esm": true,
+    "esm": true
   }
 }

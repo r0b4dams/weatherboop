@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 const pages = import.meta.glob("./pages/*", { import: "default", eager: true });
 
 const routes = Object.entries(pages).map(([path, module]) => {
-  const match = path.match(/\.\/pages\/(.*)\.[t|j]sx$/);
+  const match = path.match(/\.\/pages\/(.*)\.[t|j]sx?$/);
   const name = match![1];
   return {
     name,

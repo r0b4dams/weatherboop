@@ -1,7 +1,7 @@
-import { createAsyncThunk, type ActionReducerMapBuilder } from "@reduxjs/toolkit";
+import * as rtk from "@reduxjs/toolkit";
 import { Coordinates, MapState } from "./types";
 
-export const getWeather = createAsyncThunk(
+export const getWeather = rtk.createAsyncThunk(
   "map/getWeather",
   async ({ lat, lon }: Coordinates, { rejectWithValue }) => {
     try {
@@ -14,7 +14,7 @@ export const getWeather = createAsyncThunk(
   },
 );
 
-export const updateWeather = (builder: ActionReducerMapBuilder<MapState>) => {
+export const updateWeather = (builder: rtk.ActionReducerMapBuilder<MapState>) => {
   builder
     .addCase(getWeather.pending, (state) => {
       state.weather = null;
