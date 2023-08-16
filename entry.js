@@ -13,9 +13,15 @@ switch (process.argv[2]) {
 }
 
 function ts() {
-  fs.writeFileSync("index.html", html.replace("/js/client/entry-client.js", "/src/client/entry-client.tsx"));
+  fs.writeFileSync(
+    "index.html",
+    html.replace("/js/client/entry-client.js", "/src/client/entry-client.tsx"),
+  );
 }
 
 function js() {
-  fs.writeFileSync("index.html", html.replace("/src/client/entry-client.tsx", "/js/client/entry-client.js"));
+  fs.writeFileSync(
+    "index.html",
+    html.replace("/src/client/entry-client.tsx", "/js/client/entry-client.js"),
+  );
 }
