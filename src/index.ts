@@ -16,7 +16,6 @@ const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url));
 const SSR = path.join(DIRNAME, "ssr");
 
 console.log({
-  NODE_ENV: process.env.NODE_ENV,
   PRODUCTION,
   DIRNAME,
   SSR,
@@ -26,15 +25,12 @@ console.log({
   const app = express();
   const { render, middlewares } = await init();
 
-  console.log(path.join(DIRNAME, "client"));
-
   if (PRODUCTION) {
     app.use(express.static(path.join(DIRNAME, "client"), { index: false }));
   } else {
     app.use(middlewares!);
     app.use(logger);
   }
-
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use("/api", api);
@@ -45,12 +41,10 @@ console.log({
   });
 })();
 
-interface Init {
+function init(): Promise<{
   render: RequestHandler;
   middlewares?: Connect.Server;
-}
-
-function init() {
+}> {
   return PRODUCTION ? production() : development();
 }
 
@@ -79,7 +73,7 @@ async function development() {
     res.status(200).set({ "Content-Type": "text/html" }).send(html);
   };
 
-  return { render, middlewares } as Init;
+  return { render, middlewares };
 }
 
 async function production() {
@@ -97,5 +91,5 @@ async function production() {
     res.status(200).set({ "Content-Type": "text/html" }).end(html);
   };
 
-  return { render } as Init;
+  return { render };
 }
