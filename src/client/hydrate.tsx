@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { Client } from "./client";
+import { Client } from ".";
 
 ReactDOM.hydrateRoot(
   document.getElementById("app") as HTMLDivElement,

@@ -8,21 +8,18 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "removeComments": true,
     "strict": true,
-    "outDir": "dist",
+    "outDir": "js",
     "module": "ESNext",
+    "target": "ESNext",
     "moduleResolution": "Node",
     "skipLibCheck": true,
-    "target": "ES2017",
     "noEmitOnError": true,
     "types": ["vite/client"]
   },
-
   "include": ["src/**/*"],
   "exclude": ["vite.config.ts"],
   "ts-node": {
     "transpileOnly": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
+    "esm": true
   }
 }

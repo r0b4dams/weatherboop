@@ -1,12 +1,10 @@
 import Routes from "./routes";
-
-import { Provider } from "react-redux";
-import { store } from "./store";
+import { AppProvider } from "./store";
 
 export const Client: React.FC = () => {
   return (
-    <Provider store={store}>
+    <AppProvider>
       <Routes />
-    </Provider>
+    </AppProvider>
   );
 };

@@ -1,58 +1,100 @@
-import fs from "fs";
+// https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
+import "dotenv/config";
+
+import fs from "fs/promises";
+import url from "url";
 import path from "path";
 import express from "express";
-import compression from "compression";
-import { createServer } from "vite";
 
-import { CONFIG } from "./config";
 import { api } from "./api";
+import { logger } from "./middleware";
+import { type RequestHandler } from "express";
+import { type Connect } from "vite";
 
-// example
-// https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
+const isProd = process.env.NODE_ENV === "production";
 
-const DEV_ENTRY = path.join(__dirname, "entry-server.tsx");
+const PORT = process.env.PORT || 3050;
+const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url));
+const SSR = path.resolve(DIRNAME, "ssr");
+
+console.log({
+  isProd,
+  ENV: process.env.NODE_ENV,
+  DIRNAME,
+  SSR,
+});
 
 (async () => {
   const app = express();
+  const { render, middlewares } = await init(isProd);
 
-  const vite = await createServer({
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.resolve(DIRNAME, "client"), { index: false }));
+  } else {
+    app.use(logger);
+    if (middlewares) {
+      app.use(middlewares);
+    }
+  }
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use("/api", api);
+  app.use(render);
+
+  app.listen(PORT, () => {
+    console.log(`App is listening on http://localhost:${PORT}`);
+  });
+})();
+
+function init(prod = false): Promise<{
+  render: RequestHandler;
+  middlewares?: Connect.Server;
+}> {
+  return prod ? production() : development();
+}
+
+async function development() {
+  const vite = await import("vite");
+
+  const { ssrLoadModule, transformIndexHtml, middlewares } = await vite.createServer({
     appType: "custom",
     server: { middlewareMode: true },
   });
+  const ssr = await ssrLoadModule(path.resolve(DIRNAME, "ssr"));
 
-  app.use(vite.middlewares);
-  app.use(express.json());
-  app.use(compression());
-  app.use(express.urlencoded({ extended: false }));
-  app.use(express.static(path.join(__dirname, "public")));
+  const render: RequestHandler = async (req, res) => {
+    const url = req.originalUrl;
+    const ctx = { url: "" };
 
-  app.use("/api", api);
-
-  app.use("*", async (req, res, next) => {
-    try {
-      const url = req.originalUrl;
-      const ctx = { url: "" };
-
-      const { render } = await vite.ssrLoadModule(DEV_ENTRY); // entry-server
-      const indexHtml = fs.readFileSync("index.html", "utf-8");
-      const template = await vite.transformIndexHtml(url, indexHtml);
-      const appHtml = template.replace(`<!--app-->`, await render(url, ctx));
-
-      if (ctx.url) {
-        res.redirect(301, ctx.url);
-        return;
-      }
-      res.status(200).set({ "Content-Type": "text/html" }).send(appHtml);
-    } catch (err) {
-      if (err instanceof Error) {
-        vite.ssrFixStacktrace(err);
-        console.log(err.stack);
-      }
-      next(err);
+    const template = await transformIndexHtml(
+      url,
+      await fs.readFile("index.html", "utf-8"), // always get fresh template in dev
+    );
+    const html = template.replace(`<!--app-->`, ssr.render(url, ctx));
+    if (ctx.url) {
+      res.redirect(301, ctx.url);
+      return;
     }
-  });
+    res.status(200).set({ "Content-Type": "text/html" }).send(html);
+  };
 
-  app.listen(CONFIG.PORT, "0.0.0.0", () => {
-    console.log(`App is listening on http://localhost:${CONFIG.PORT}`);
-  });
-})();
+  return { render, middlewares };
+}
+
+async function production() {
+  const ssr = await import("./ssr");
+  const template = await fs.readFile(path.join(DIRNAME, "client", "index.html"), "utf-8");
+
+  const render: RequestHandler = async (req, res) => {
+    const url = req.originalUrl;
+    const ctx = { url: "" };
+    const html = template.replace(`<!--app-->`, ssr.render(url));
+    if (ctx.url) {
+      res.redirect(301, ctx.url);
+      return;
+    }
+    res.status(200).set({ "Content-Type": "text/html" }).end(html);
+  };
+
+  return { render };
+}

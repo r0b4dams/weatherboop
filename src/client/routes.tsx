@@ -4,8 +4,11 @@ import { Route, Routes } from "react-router-dom";
 const pages = import.meta.glob("./pages/*", { import: "default", eager: true });
 
 const routes = Object.entries(pages).map(([path, module]) => {
-  const match = path.match(/\.\/pages\/(.*)\.[t|j]sx$/);
-  const name = match![1];
+  const match = path.match(/\.\/pages\/(.*)\.[t|j]sx?$/);
+  if (!match) {
+    throw new Error("NO PAGES FOUND");
+  }
+  const name = match[1];
   return {
     name,
     path: name === "index" ? "/" : `/${name?.toLowerCase()}`,
@@ -13,7 +16,7 @@ const routes = Object.entries(pages).map(([path, module]) => {
   };
 });
 
-const Router: React.FC = () => {
+export default () => {
   return (
     <Routes>
       {routes.map(({ name, path, Page }) => (
@@ -22,5 +25,3 @@ const Router: React.FC = () => {
     </Routes>
   );
 };
-
-export default Router;
