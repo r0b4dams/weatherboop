@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/src/css/mapbox-gl.css";
 
 import { useAppContext } from "../../store";
-import { boop, focus, updateCoordinates } from "./handlers";
+import { boop, focus, getWeather, setCoordinates } from "./handlers";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -28,7 +28,8 @@ export const Mapbox: React.FC = () => {
 
     map.current.on("click", boop(map.current, marker.current));
     map.current.on("click", focus(map.current));
-    map.current.on("move", updateCoordinates(map.current, dispatch));
+    map.current.on("click", getWeather(dispatch));
+    map.current.on("move", setCoordinates(map.current, dispatch));
 
     return () => {
       map.current?.remove();
