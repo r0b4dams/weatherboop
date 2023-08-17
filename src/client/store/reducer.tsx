@@ -13,6 +13,9 @@ export const appReducer: Reducer<AppState, AppReducerAction> = (state, action) =
     case ACTIONS.SET_ZOOM:
       return { ...state, zoom: action.payload };
 
+    case ACTIONS.SET_WEATHER:
+      return { ...state, weather: action.payload };
+
     default:
       throw new Error(`UNRECOGNIZED ACTION: ${action}`);
   }
