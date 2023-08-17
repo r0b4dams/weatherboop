@@ -4,4 +4,5 @@ interface AppState {
   zoom: number;
   weather: unknown;
   error: unknown;
+  theme: string;
 }

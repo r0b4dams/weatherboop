@@ -7,6 +7,11 @@ import { boop, focus, getWeather, setCoordinates } from "./handlers";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
+const MAP_STYLE = {
+  DARK: "mapbox://styles/mapbox/dark-v11",
+  LIGHT: "mapbox://styles/mapbox/light-v11",
+};
+
 export const Mapbox: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
@@ -18,11 +23,11 @@ export const Mapbox: React.FC = () => {
     if (map.current) {
       return;
     }
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current as HTMLDivElement,
       center: [state.lng, state.lat],
       zoom: state.zoom,
-      style: "mapbox://styles/mapbox/streets-v11",
     });
     marker.current = new mapboxgl.Marker();
 
@@ -38,6 +43,13 @@ export const Mapbox: React.FC = () => {
       marker.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (state.theme) {
+      map.current?.setStyle(state.theme === "dark" ? MAP_STYLE.DARK : MAP_STYLE.LIGHT);
+      localStorage.setItem("theme", state.theme);
+    }
+  }, [state.theme]);
 
   return (
     <div

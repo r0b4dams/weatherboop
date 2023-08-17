@@ -1,8 +1,8 @@
-import { createContext, useReducer, useMemo, useContext, type Dispatch } from "react";
+import { createContext, useReducer, useMemo, useContext, type Dispatch, useEffect } from "react";
 
 import { appReducer } from "./reducer";
 import { initialState } from "./init";
-import { type AppReducerAction } from "./actions";
+import { setTheme, type AppReducerAction } from "./actions";
 
 interface Context {
   state: AppState;
@@ -16,6 +16,11 @@ export const AppContext = createContext<Context>({
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }): JSX.Element => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+  useEffect(() => {
+    const theme = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+    dispatch(setTheme(theme));
+  }, []);
 
   const context = useMemo(() => {
     return { state, dispatch };
