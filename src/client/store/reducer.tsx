@@ -16,7 +16,12 @@ export const appReducer: Reducer<AppState, AppReducerAction> = (state, action) =
     case ACTIONS.SET_WEATHER:
       return { ...state, weather: action.payload };
 
+    case ACTIONS.SET_THEME:
+      return { ...state, theme: action.payload };
+
     default:
-      throw new Error(`UNRECOGNIZED ACTION: ${action}`);
+      throw new Error(
+        `UNRECOGNIZED ACTION: ${JSON.stringify(action)} have you created an appReducer case?`,
+      );
   }
 };

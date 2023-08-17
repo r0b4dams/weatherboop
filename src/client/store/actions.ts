@@ -3,6 +3,7 @@ export const ACTIONS = {
   SET_LAT: "SET_LAT",
   SET_ZOOM: "SET_ZOOM",
   SET_WEATHER: "SET_WEATHER",
+  SET_THEME: "SET_THEME",
 } as const;
 
 export type NumberAction = {
@@ -15,7 +16,12 @@ export type WeatherAction = {
   type: (typeof ACTIONS)["SET_WEATHER"];
 };
 
-export type AppReducerAction = NumberAction | WeatherAction;
+export type StringAction = {
+  payload: string;
+  type: (typeof ACTIONS)["SET_THEME"];
+};
+
+export type AppReducerAction = NumberAction | StringAction | WeatherAction;
 export type AppDispatch = React.Dispatch<AppReducerAction>;
 
 // action creators
@@ -44,6 +50,13 @@ export const setZoom = (payload: number): NumberAction => {
 export const setWeather = (payload: unknown): WeatherAction => {
   return {
     type: ACTIONS.SET_WEATHER,
+    payload,
+  };
+};
+
+export const setTheme = (payload: string): StringAction => {
+  return {
+    type: ACTIONS.SET_THEME,
     payload,
   };
 };
