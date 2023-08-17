@@ -8,10 +8,11 @@ import { updateCoordinates } from "./handlers";
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
 export const Mapbox: React.FC = () => {
+  const { state, dispatch } = useAppContext();
+
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
-  const { state, dispatch } = useAppContext();
 
   useEffect(() => {
     if (map.current) {
@@ -35,7 +36,7 @@ export const Mapbox: React.FC = () => {
       marker.current?.remove();
       marker.current = null;
     };
-  });
+  }, []);
 
   return (
     <div

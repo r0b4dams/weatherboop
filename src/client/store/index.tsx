@@ -2,6 +2,7 @@ import { createContext, useReducer, useMemo, useContext, type Dispatch } from "r
 
 import { appReducer } from "./reducer";
 import { initialState } from "./init";
+import { type AppReducerAction } from "./actions";
 
 interface Context {
   state: AppState;
