@@ -40,8 +40,6 @@ export const getWeather = (dispatch: AppDispatch) => async (e: MapMouseEvent & E
     const lat = e.lngLat.lat;
     const res = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
     const data = await res.json();
-    const action = setWeather(data);
-    console.log(action);
     dispatch(setWeather(data));
   } catch (error) {
     console.error(error);
