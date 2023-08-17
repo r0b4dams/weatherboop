@@ -16,16 +16,24 @@ const getRGB = (hexes: HexTuple): RgbTuple => {
 
 // returns tuple of 2 digit hexadecimal values
 const getHexadecimal = (hexStr: string): HexTuple => {
-  let R, G, B;
+  let match, R, G, B;
+
   const parsed = hexStr[0] === "#" ? hexStr.substring(1) : hexStr;
   switch (parsed.length) {
     case 3:
-      const short = hexStr.match(/[0-9a-fA-F]{1}/g)!;
-      [R, G, B] = short.map((hex) => hex + hex);
+      match = hexStr.match(/[0-9a-fA-F]{1}/g);
+      if (!match) {
+        throw new Error();
+      }
+      [R, G, B] = match.map((hex) => hex + hex);
       return [R, G, B];
 
     case 6:
-      [R, G, B] = hexStr.match(/[0-9a-fA-F]{2}/g)!;
+      match = hexStr.match(/[0-9a-fA-F]{2}/g);
+      if (!match) {
+        throw new Error();
+      }
+      [R, G, B] = match;
       return [R, G, B];
 
     default:

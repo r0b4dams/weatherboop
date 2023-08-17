@@ -18,7 +18,7 @@ export const Mapbox: React.FC = () => {
       return;
     }
     map.current = new mapboxgl.Map({
-      container: mapContainer.current!,
+      container: mapContainer.current as HTMLDivElement,
       center: [state.lng, state.lat],
       zoom: state.zoom,
       style: "mapbox://styles/mapbox/streets-v11",

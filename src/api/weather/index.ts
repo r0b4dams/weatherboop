@@ -7,7 +7,7 @@ const query_config = {
   units: "imperial",
 };
 
-const buildQueryParams = ({ lat, lon }: any) => {
+const buildQueryParams = ({ lat, lon }: { [key: string]: unknown }) => {
   return Object.entries({
     ...query_config,
     lat,

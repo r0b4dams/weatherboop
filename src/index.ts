@@ -31,8 +31,10 @@ console.log({
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.resolve(DIRNAME, "client"), { index: false }));
   } else {
-    app.use(middlewares!);
     app.use(logger);
+    if (middlewares) {
+      app.use(middlewares);
+    }
   }
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
@@ -60,7 +62,7 @@ async function development() {
   });
   const ssr = await ssrLoadModule(path.resolve(DIRNAME, "ssr"));
 
-  const render: RequestHandler = async (req, res, next) => {
+  const render: RequestHandler = async (req, res) => {
     const url = req.originalUrl;
     const ctx = { url: "" };
 
