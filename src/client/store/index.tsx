@@ -6,12 +6,11 @@ import { setTheme, type AppReducerAction } from "./actions";
 
 interface Context {
   state: AppState;
-  dispatch: React.Dispatch<AppReducerAction>;
+  dispatch?: React.Dispatch<AppReducerAction>;
 }
 
 export const AppContext = createContext<Context>({
   state: initialState,
-  dispatch: {} as Dispatch<AppReducerAction>,
 });
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }): JSX.Element => {
