@@ -1,4 +1,6 @@
-import { Mapbox, Sidebar } from "../components";
+import { Mapbox } from "../components";
+import { Weather } from "../components/Weather";
+import { useAppContext } from "../store";
 
 if (!import.meta.env.SSR) {
   navigator.geolocation.getCurrentPosition(function (position) {
@@ -8,10 +10,12 @@ if (!import.meta.env.SSR) {
 }
 
 export default function Map() {
+  const { state } = useAppContext();
+
   return (
     <>
-      <Sidebar />
       <Mapbox />
+      {state.weather && <Weather data={state.weather} />}
     </>
   );
 }
