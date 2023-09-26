@@ -20,7 +20,7 @@ export const Mapbox: React.FC = () => {
   const marker = useRef<mapboxgl.Marker | null>(null);
 
   useEffect(() => {
-    if (map.current) {
+    if (map.current || !dispatch) {
       return;
     }
 
@@ -29,7 +29,10 @@ export const Mapbox: React.FC = () => {
       center: [state.lng, state.lat],
       zoom: state.zoom,
     });
-    marker.current = new mapboxgl.Marker();
+
+    const template = document.getElementById("marker-template") as HTMLTemplateElement;
+    const boopMarker = document.importNode(template.content.firstElementChild as HTMLElement, true);
+    marker.current = new mapboxgl.Marker(boopMarker);
 
     map.current.on("click", boop(map.current, marker.current));
     map.current.on("click", focus(map.current));
@@ -45,8 +48,8 @@ export const Mapbox: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (state.theme) {
-      map.current?.setStyle(state.theme === "dark" ? MAP_STYLE.DARK : MAP_STYLE.LIGHT);
+    if (map.current) {
+      map.current.setStyle(state.theme === "dark" ? MAP_STYLE.DARK : MAP_STYLE.LIGHT);
       localStorage.setItem("theme", state.theme);
     }
   }, [state.theme]);
