@@ -1,3 +1,3 @@
 export { Mapbox } from "./Mapbox";
-export { Sidebar } from "./Sidebar";
+export { Weather } from "./Weather";
 export { ThemeToggle } from "./ThemeToggle";

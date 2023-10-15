@@ -12,7 +12,7 @@ export type NumberAction = {
 };
 
 export type WeatherAction = {
-  payload: unknown;
+  payload: IWeather;
   type: (typeof ACTIONS)["SET_WEATHER"];
 };
 
@@ -47,7 +47,7 @@ export const setZoom = (payload: number): NumberAction => {
   };
 };
 
-export const setWeather = (payload: unknown): WeatherAction => {
+export const setWeather = (payload: IWeather): WeatherAction => {
   return {
     type: ACTIONS.SET_WEATHER,
     payload,

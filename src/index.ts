@@ -24,27 +24,34 @@ console.log({
   SSR,
 });
 
-(async () => {
-  const app = express();
-  const { render, middlewares } = await init(isProd);
+main();
 
-  if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.resolve(DIRNAME, "client"), { index: false }));
-  } else {
-    app.use(logger);
-    if (middlewares) {
-      app.use(middlewares);
+async function main() {
+  try {
+    const app = express();
+    const { render, middlewares } = await init(isProd);
+
+    if (process.env.NODE_ENV === "production") {
+      app.use(express.static(path.resolve(DIRNAME, "client"), { index: false }));
+    } else {
+      app.use(logger);
+      if (middlewares) {
+        app.use(middlewares);
+      }
     }
-  }
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-  app.use("/api", api);
-  app.use(render);
 
-  app.listen(PORT, () => {
-    console.log(`App is listening on http://localhost:${PORT}`);
-  });
-})();
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+    app.use("/api", api);
+    app.use(render);
+
+    app.listen(PORT, () => {
+      console.log(`App is listening on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function init(prod = false): Promise<{
   render: RequestHandler;
@@ -53,6 +60,34 @@ function init(prod = false): Promise<{
   return prod ? production() : development();
 }
 
+/**
+ * set up production ssr
+ * @returns a render RequestHandler
+ */
+async function production() {
+  const ssr = await import("./ssr");
+  const template = await fs.readFile(path.join(DIRNAME, "client", "index.html"), "utf-8");
+
+  const render: RequestHandler = async (req, res) => {
+    const url = req.originalUrl;
+    const ctx = { url: "" };
+    const html = template.replace(`<!--app-->`, ssr.render(url));
+
+    if (ctx.url) {
+      res.redirect(301, ctx.url);
+      return;
+    }
+
+    res.status(200).set({ "Content-Type": "text/html" }).end(html);
+  };
+
+  return { render };
+}
+
+/**
+ * setup a vite dev server
+ * @returns object containing a render RequestHandler and vite dev middleware
+ */
 async function development() {
   const vite = await import("vite");
 
@@ -60,6 +95,7 @@ async function development() {
     appType: "custom",
     server: { middlewareMode: true },
   });
+
   const ssr = await ssrLoadModule(path.resolve(DIRNAME, "ssr"));
 
   const render: RequestHandler = async (req, res) => {
@@ -70,31 +106,16 @@ async function development() {
       url,
       await fs.readFile("index.html", "utf-8"), // always get fresh template in dev
     );
+
     const html = template.replace(`<!--app-->`, ssr.render(url, ctx));
+
     if (ctx.url) {
       res.redirect(301, ctx.url);
       return;
     }
+
     res.status(200).set({ "Content-Type": "text/html" }).send(html);
   };
 
   return { render, middlewares };
-}
-
-async function production() {
-  const ssr = await import("./ssr");
-  const template = await fs.readFile(path.join(DIRNAME, "client", "index.html"), "utf-8");
-
-  const render: RequestHandler = async (req, res) => {
-    const url = req.originalUrl;
-    const ctx = { url: "" };
-    const html = template.replace(`<!--app-->`, ssr.render(url));
-    if (ctx.url) {
-      res.redirect(301, ctx.url);
-      return;
-    }
-    res.status(200).set({ "Content-Type": "text/html" }).end(html);
-  };
-
-  return { render };
 }

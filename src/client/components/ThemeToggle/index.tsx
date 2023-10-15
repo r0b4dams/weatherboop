@@ -5,7 +5,9 @@ export const ThemeToggle: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const handleClick = () => {
-    dispatch(setTheme(state.theme === "dark" ? "light" : "dark"));
+    if (dispatch) {
+      dispatch(setTheme(state.theme === "dark" ? "light" : "dark"));
+    }
   };
 
   if (!state.theme) {
