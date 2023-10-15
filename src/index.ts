@@ -61,7 +61,7 @@ function init(prod = false): Promise<{
 }
 
 /**
- *
+ * set up production ssr
  * @returns a render RequestHandler
  */
 async function production() {
