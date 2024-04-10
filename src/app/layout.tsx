@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,7 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <UserProvider>
+        <body className={`${inter.className} min-h-[100vh] flex flex-col`}>
+          <header>HEADER</header>
+          <main className='flex-grow'>{children}</main>
+          <footer>FOOTER</footer>
+        </body>
+      </UserProvider>
     </html>
   );
 }
