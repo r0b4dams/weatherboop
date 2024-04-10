@@ -1,4 +1,0 @@
-{
-  "ext": "html,css,ts,tsx,json",
-  "ignore": ["src/client", "src/types"]
-}
