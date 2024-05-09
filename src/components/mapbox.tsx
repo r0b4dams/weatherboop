@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, type FC } from "react";
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { LngLatLike } from "mapbox-gl";
 
+import { getWeather } from "./actions";
 import { DEBUGGER } from "./DEBUGGER";
 
 const MAPBOX_PUBLIC_KEY =
@@ -45,12 +46,17 @@ export const Mapbox: FC = () => {
       setZoom(mapZoom);
     });
 
-    map.on("click", (e) => {
+    map.on("click", async (e) => {
+      const center: LngLatLike = [e.lngLat.lng, e.lngLat.lat];
+
       map.flyTo({
-        center: [e.lngLat.lng, e.lngLat.lat],
+        center,
         speed: 0.5,
         essential: false,
       });
+
+      const weather = await getWeather(center);
+      console.log(weather);
     });
 
     return () => {
