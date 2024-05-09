@@ -1,14 +1,14 @@
 import { type FC } from "react";
 
-interface SidebarProps {
+interface DEBUGGER_PROPS {
   lng: string;
   lat: string;
   zoom: string;
 }
 
-export const Sidebar: FC<SidebarProps> = ({ lng, lat, zoom }) => {
+export const DEBUGGER: FC<DEBUGGER_PROPS> = ({ lng, lat, zoom }) => {
   return (
-    <div className="absolute w-[150px] z-10 bg-slate-900 text-slate-100 rounded-br-lg">
+    <div className="absolute w-[150px] bg-slate-900 text-slate-100 rounded-br-lg">
       <p>Longitude: {lng}</p>
       <p>Latitude: {lat}</p>
       <p>Zoom: {zoom}</p>
