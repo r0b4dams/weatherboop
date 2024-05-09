@@ -37,6 +37,7 @@ export const Mapbox: FC = () => {
       center: [lng, lat],
       zoom: zoom,
     });
+    const marker = new mapboxgl.Marker();
 
     map.on("move", () => {
       const mapCenter = map.getCenter();
@@ -49,6 +50,8 @@ export const Mapbox: FC = () => {
     map.on("click", async (e) => {
       const center: LngLatLike = [e.lngLat.lng, e.lngLat.lat];
 
+      marker.setLngLat(center).addTo(map);
+
       map.flyTo({
         center,
         speed: 0.5,
@@ -60,6 +63,7 @@ export const Mapbox: FC = () => {
     });
 
     return () => {
+      marker.remove();
       map.remove();
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
