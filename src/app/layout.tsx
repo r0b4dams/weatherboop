@@ -1,5 +1,6 @@
+import { type PropsWithChildren } from "react";
+import { type Metadata } from "next";
 import { Inter } from "next/font/google";
-import type { Metadata } from "next";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./globals.css";
@@ -11,11 +12,7 @@ export const metadata: Metadata = {
   description: "Get realtime weather data by clicking on a map!",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
