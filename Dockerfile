@@ -1,4 +1,7 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 # 1. Install dependencies only when needed
 FROM base AS deps
@@ -45,4 +48,5 @@ USER nextjs
 
 ENV PORT 3000
 EXPOSE 3000
-CMD node server.js
+
+ENTRYPOINT node server.js
