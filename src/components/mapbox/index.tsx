@@ -1,34 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useState, type FC } from "react";
+import { createRoot } from "react-dom/client";
 import mapboxgl, { type LngLatLike } from "mapbox-gl";
 
+import { Popup } from "~/components/popup";
 import { MAPBOX_PUBLIC_KEY } from "~/config";
-import { MAPBOX_STYLE } from "./mapstyles";
-import { DEBUG } from "../DEBUG";
+import { MAPBOX_STYLE } from "./styles";
+import { getData } from "./actions";
+
+const popup = new mapboxgl.Popup({ closeOnClick: false });
+popup
+  .setHTML("<div id='weatherboop-popup'></div>")
+  .setLngLat([0, 0])
+  .setOffset(35)
+  .setMaxWidth("300");
+popup.addClassName("hidden");
 
 export const Mapbox: FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-
-  const [forecast, setForecast] = useState();
-
-  const [lng, setLng] = useState(7.18);
-  const [lat, setLat] = useState(51.25);
-  const [zoom, setZoom] = useState(10);
-
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(
-  //     (pos) => {
-  //       console.log(pos.coords);
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //     },
-  //     {
-  //       enableHighAccuracy: true,
-  //     },
-  //   );
-  // }, []);
 
   useEffect(() => {
     if (!mapboxgl.supported()) {
@@ -41,37 +31,56 @@ export const Mapbox: FC = () => {
       style: MAPBOX_STYLE.OUTDOORS,
       projection: { name: "globe" },
       container: mapContainer.current!,
-      center: [lng, lat],
-      zoom: zoom,
+      center: [0, 0],
+      zoom: 5,
     });
 
     const marker = new mapboxgl.Marker();
 
-    map.on("move", () => {
-      const mapCenter = map.getCenter();
-      const mapZoom = map.getZoom();
-      setLng(mapCenter.lng);
-      setLat(mapCenter.lat);
-      setZoom(mapZoom);
+    popup.addTo(map);
+    const popupRoot = createRoot(popup.getElement());
+
+    map.once("click", () => {
+      popup.removeClassName("hidden");
     });
 
     map.on("click", async (e) => {
       const coords: LngLatLike = [e.lngLat.lng, e.lngLat.lat];
+
+      // update view
       map.flyTo({ center: coords, speed: 0.5 });
+
+      //update marker
       marker.setLngLat(coords).addTo(map);
+
+      // update popup
+      popup.setLngLat(coords);
+      popupRoot.render(<div>LOADING</div>);
+      const data = await getData(coords); // server action
+      setTimeout(() => {
+        popupRoot.render(
+          <Popup
+            lng={e.lngLat.lng}
+            lat={e.lngLat.lat}
+            current={data.current!}
+            geo={data.geo!}
+          />,
+        );
+      }, 1500);
     });
 
     return () => {
+      popup.remove();
       marker.remove();
       map.remove();
     };
+
     // This hook should only run once on mount
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      <div className="absolute top-0 right-0 bottom-0 left-0" ref={mapContainer} />
-      <DEBUG lng={lng} lat={lat} zoom={zoom} />
+      <div className="absolute top-0 right-0 bottom-0 left-0 " ref={mapContainer} />
     </>
   );
 };
