@@ -1,3 +1,5 @@
+"use server";
+
 import {
   OPENWEATHERMAP_APPID,
   OPENWEATHERMAP_CURRENT_URL,
@@ -8,20 +10,12 @@ import {
 type Coordinates = [number, number];
 
 export async function getData(coords: Coordinates) {
-  try {
-    const [current, forecast, geo] = await Promise.all([
-      getCurrentWeather(coords),
-      getFiveDayForecast(coords),
-      getReverseGeo(coords),
-    ]);
-    return {
-      current,
-      forecast,
-      geo,
-    };
-  } catch (error) {
-    console.log(error);
-  }
+  const [current, forecast, geo] = await Promise.all([
+    getCurrentWeather(coords),
+    getFiveDayForecast(coords),
+    getReverseGeo(coords),
+  ]);
+  return { current, forecast, geo };
 }
 
 async function getCurrentWeather([lng, lat]: Coordinates) {
