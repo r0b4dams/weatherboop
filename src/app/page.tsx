@@ -1,9 +1,5 @@
-import NextLink from "next/link";
+import { Dev } from "~/components/dev";
 
 export default function Home() {
-  return (
-    <>
-      <NextLink href="/map">Map</NextLink>
-    </>
-  );
+  return <Dev />;
 }
