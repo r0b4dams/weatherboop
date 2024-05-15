@@ -3,7 +3,7 @@ namespace OWM {
     name: string;
     state?: string;
     country: string;
-    local_names: Record<string, string>;
+    local_names?: Record<string, string>;
     lat: number;
     lon: number;
   }
@@ -26,7 +26,7 @@ namespace OWM {
   /**
    * https://openweathermap.org/current#fields_json
    */
-  interface CurrentWeatherResponse {
+  interface WeatherResponse {
     /** Response code */
     cod: number;
     coord: {
@@ -92,4 +92,19 @@ namespace OWM {
     /** Shift in seconds from UTC  */
     timezone: number;
   }
+}
+
+interface AppLocationResponse {
+  name: string;
+  state?: string;
+  country?: string;
+}
+
+interface AppWeatherResponse {
+  location: AppLocationResponse;
+  temp: number;
+  feels_like: number;
+  humidity: number;
+  pressure: number;
+  weather: (OWM.WeatherItem & { icon_url: string })[];
 }
