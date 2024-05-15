@@ -1,5 +1,7 @@
-import { Dev } from "~/components/dev";
-
-export default function Home() {
-  return <Dev />;
+export default async function Home() {
+  return (
+    <div>
+      <p>Home</p>
+    </div>
+  );
 }
