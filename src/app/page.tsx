@@ -1,9 +1,7 @@
-import NextLink from "next/link";
-
-export default function Home() {
+export default async function Home() {
   return (
-    <>
-      <NextLink href="/map">Map</NextLink>
-    </>
+    <div>
+      <p>Home</p>
+    </div>
   );
 }

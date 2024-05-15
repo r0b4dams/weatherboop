@@ -1,77 +1,144 @@
 "use client";
 
-import { useEffect, useRef, useState, type FC } from "react";
-import mapboxgl, { type LngLatLike } from "mapbox-gl";
+import { useRef, useState, type FC, type MouseEventHandler } from "react";
+import NextImage from "next/image";
+import Map, {
+  // Marker,
+  Popup,
+  type MapRef,
+  type MapLayerMouseEvent,
+  type ViewState,
+  type ViewStateChangeEvent,
+} from "react-map-gl";
+import { type LngLatLike } from "react-map-gl";
 
 import { MAPBOX_PUBLIC_KEY } from "~/config";
-import { MAPBOX_STYLE } from "./mapstyles";
-import { DEBUG } from "../DEBUG";
+import { MAPBOX_STYLE } from "./styles";
+
+interface MapState extends Partial<ViewState> {
+  zoom: number;
+  latitude: number;
+  longitude: number;
+}
+
+interface PopupState extends Partial<AppWeatherResponse> {
+  show: boolean;
+  latitude: number;
+  longitude: number;
+}
 
 export const Mapbox: FC = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<MapRef>(null);
 
-  const [forecast, setForecast] = useState();
+  const [units, setUnits] = useState<"metric" | "imperial">("metric");
 
-  const [lng, setLng] = useState(7.18);
-  const [lat, setLat] = useState(51.25);
-  const [zoom, setZoom] = useState(10);
+  const [viewState, setViewState] = useState<MapState>({
+    zoom: 5,
+    latitude: 0,
+    longitude: 0,
+  });
 
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(
-  //     (pos) => {
-  //       console.log(pos.coords);
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //     },
-  //     {
-  //       enableHighAccuracy: true,
-  //     },
-  //   );
-  // }, []);
+  const [popup, setPopup] = useState<PopupState>({
+    show: false,
+    latitude: 0,
+    longitude: 0,
+  });
 
-  useEffect(() => {
-    if (!mapboxgl.supported()) {
-      alert("Your browser does not support Mapbox GL");
-      return;
-    }
+  const handleMapMove = (e: ViewStateChangeEvent) => {
+    setViewState(e.viewState);
+  };
 
-    const map = new mapboxgl.Map({
-      accessToken: MAPBOX_PUBLIC_KEY,
-      style: MAPBOX_STYLE.OUTDOORS,
-      projection: { name: "globe" },
-      container: mapContainer.current!,
-      center: [lng, lat],
-      zoom: zoom,
-    });
+  const getCurrentWeather = async (coords: [number, number]) => {
+    const params = new URLSearchParams({
+      lon: coords[0].toString(),
+      lat: coords[1].toString(),
+    }).toString();
+    const res = await fetch(`/api/boop?${params}`);
+    const data = await res.json();
+    return data;
+  };
 
-    const marker = new mapboxgl.Marker();
+  const handleMapClick = async (e: MapLayerMouseEvent) => {
+    const coords: LngLatLike = [e.lngLat.lng, e.lngLat.lat];
+    mapRef.current?.flyTo({ center: coords, speed: 0.25 });
+    setPopup((prev: any) => ({ ...prev, show: false }));
+    const data = await getCurrentWeather(coords);
+    setPopup((prev: any) => ({
+      ...prev,
+      ...data,
+      latitude: e.lngLat.lat,
+      longitude: e.lngLat.lng,
+      show: true,
+    }));
+  };
 
-    map.on("move", () => {
-      const mapCenter = map.getCenter();
-      const mapZoom = map.getZoom();
-      setLng(mapCenter.lng);
-      setLat(mapCenter.lat);
-      setZoom(mapZoom);
-    });
-
-    map.on("click", async (e) => {
-      const coords: LngLatLike = [e.lngLat.lng, e.lngLat.lat];
-      map.flyTo({ center: coords, speed: 0.5 });
-      marker.setLngLat(coords).addTo(map);
-    });
-
-    return () => {
-      marker.remove();
-      map.remove();
-    };
-    // This hook should only run once on mount
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const handleClosePopup: MouseEventHandler<HTMLButtonElement> = () => {
+    setPopup((prev: any) => ({ ...prev, show: false }));
+  };
 
   return (
     <>
-      <div className="absolute top-0 right-0 bottom-0 left-0" ref={mapContainer} />
-      <DEBUG lng={lng} lat={lat} zoom={zoom} />
+      <Map
+        reuseMaps
+        ref={mapRef}
+        mapboxAccessToken={MAPBOX_PUBLIC_KEY}
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        }}
+        mapStyle={MAPBOX_STYLE.OUTDOORS}
+        onMove={handleMapMove}
+        onClick={handleMapClick}
+        {...viewState}
+      >
+        {popup.show && (
+          <Popup
+            latitude={popup.latitude}
+            longitude={popup.longitude}
+            closeButton={false}
+            offset={0}
+          >
+            <div id="weather-content">
+              <div>{popup.location?.name}</div>
+
+              <div>
+                {popup.weather?.map((item) => (
+                  <div key={item.id}>
+                    <i className={`wi wi-owm-${item.id}`} />
+                    <span className="pl-1">{item.description}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* metric: Celsius, imperial: Fahrenheit */}
+              <div>
+                <i className="wi wi-thermometer" />
+                <span className="text-slate-700">{popup.temp}</span>
+                <i
+                  className={`wi ${units === "imperial" ? "wi-fahrenheit" : "wi-celsius"}`}
+                />
+              </div>
+
+              {/* Humidity, % */}
+              <div>
+                <i className="wi wi-humidity"></i>
+                <span className="text-slate-700">{popup.humidity} %</span>
+              </div>
+
+              {/* Atmospheric pressure on the sea level, hPa */}
+              <div>
+                <div>
+                  <i className="wi wi-barometer" />
+                  <span className="pl-1 text-slate-700">{popup.pressure} hPa</span>
+                </div>
+              </div>
+            </div>
+          </Popup>
+        )}
+      </Map>
     </>
   );
 };

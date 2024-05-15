@@ -3,7 +3,8 @@ import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import "./globals.css";
+import "~/css/weather-icons.min.css";
+import "~/css/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
