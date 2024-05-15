@@ -13,9 +13,9 @@ const getLocation = async (params: string): Promise<OWM.GeoResponse> => {
 const formatLocation = (geo: OWM.GeoResponse) => {
   const [location] = geo;
   if (!location) {
-    return { name: "Earth" };
+    return null;
   }
-  const result: { name: string; state?: string; country?: string } = {
+  const result: AppLocationResponse = {
     name: location.name,
   };
   if (location.state) {
@@ -58,6 +58,6 @@ export async function GET(request: NextRequest) {
 
   return Response.json({
     location: formatLocation(location),
-    weather: formatWeather(weather),
+    ...formatWeather(weather),
   });
 }
