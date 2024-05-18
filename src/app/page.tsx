@@ -1,7 +1,5 @@
+import { Mapbox } from "~/components/mapbox";
+
 export default async function Home() {
-  return (
-    <div>
-      <p>Home</p>
-    </div>
-  );
+  return <Mapbox />;
 }
