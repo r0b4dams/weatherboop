@@ -1,5 +1,18 @@
-import { Mapbox } from "~/components/mapbox";
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { Mapbox, Sidebar } from "~/components";
 
 export default async function Home() {
-  return <Mapbox />;
+  return (
+    <>
+      <SignedIn>
+        <Sidebar />
+        <Mapbox />
+      </SignedIn>
+
+      <SignedOut>
+        <SignInButton mode="modal" />
+        <SignUpButton mode="modal" />
+      </SignedOut>
+    </>
+  );
 }
