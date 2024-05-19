@@ -1,12 +1,24 @@
-import { type PropsWithChildren } from "react";
-import { type Metadata } from "next";
-import { Inter } from "next/font/google";
-
 import "mapbox-gl/dist/mapbox-gl.css";
-import "~/css/weather-icons.min.css";
 import "~/css/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import { type PropsWithChildren } from "react";
+import {
+  ClerkLoaded,
+  ClerkLoading,
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import { type Metadata } from "next";
+import { Roboto } from "next/font/google";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Weatherboop",
@@ -16,9 +28,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
-        <main className="min-h-screen">{children}</main>
-      </body>
+      <ClerkProvider>
+        <body className={`${roboto.className} antialiased`}>
+          <main className="min-h-screen">
+            <ClerkLoading>
+              <div>Clerk is loading...</div>
+            </ClerkLoading>
+            <ClerkLoaded>{children}</ClerkLoaded>
+          </main>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }
