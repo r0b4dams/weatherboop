@@ -3,8 +3,8 @@ import "~/css/globals.css";
 
 import { type PropsWithChildren } from "react";
 import { type Metadata } from "next";
-import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { Roboto } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const roboto = Roboto({
   subsets: ["latin"],
