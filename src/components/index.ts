@@ -1,2 +1,2 @@
 export { Mapbox } from "./mapbox";
-export { Sidebar } from "./sidebar";
+export { UI } from "./ui";
