@@ -2,18 +2,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "~/css/globals.css";
 
 import { type PropsWithChildren } from "react";
-import {
-  ClerkLoaded,
-  ClerkLoading,
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
 import { type Metadata } from "next";
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { Roboto } from "next/font/google";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -30,12 +21,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <ClerkProvider>
         <body className={`${roboto.className} antialiased`}>
-          <main className="min-h-screen">
-            <ClerkLoading>
-              <div>Clerk is loading...</div>
-            </ClerkLoading>
-            <ClerkLoaded>{children}</ClerkLoaded>
-          </main>
+          <main className="min-h-screen">{children}</main>
         </body>
       </ClerkProvider>
     </html>
