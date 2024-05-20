@@ -1,18 +1,22 @@
-import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
-import { Mapbox, Sidebar } from "~/components";
+import { SignInButton, SignUpButton, SignedOut } from "@clerk/nextjs";
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
-      <SignedIn>
-        <Sidebar />
-        <Mapbox />
-      </SignedIn>
+      <div>
+        <p>Weatherboop</p>
 
-      <SignedOut>
-        <SignInButton mode="modal" />
-        <SignUpButton mode="modal" />
-      </SignedOut>
+        <div className="flex flex-col">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button>Sign in with Clerk</button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button>Register with Clerk</button>
+            </SignUpButton>
+          </SignedOut>
+        </div>
+      </div>
     </>
   );
 }
