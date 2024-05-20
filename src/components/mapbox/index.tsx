@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FC } from "react";
+import { useRef, useState } from "react";
 
 import Map, {
   type LngLatLike,
@@ -12,7 +12,6 @@ import Map, {
 
 import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MAPBOX_STYLE } from "./styles";
-import { SignOutButton, SignedIn } from "@clerk/nextjs";
 
 interface MapState extends Partial<ViewState> {
   zoom: number;
@@ -31,7 +30,6 @@ async function getCurrentWeather(coords: [number, number], units: string) {
 }
 
 export function Mapbox() {
-  console.log("map");
   const mapRef = useRef<MapRef>(null);
   const [ready, setReady] = useState(false);
 
