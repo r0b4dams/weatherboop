@@ -93,18 +93,3 @@ namespace OWM {
     timezone: number;
   }
 }
-
-interface AppLocationResponse {
-  name: string;
-  state?: string;
-  country?: string;
-}
-
-interface AppWeatherResponse {
-  location: AppLocationResponse;
-  temp: number;
-  feels_like: number;
-  humidity: number;
-  pressure: number;
-  weather: (OWM.WeatherItem & { icon_url: string })[];
-}
