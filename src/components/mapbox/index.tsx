@@ -11,7 +11,7 @@ import Map, {
 } from "react-map-gl";
 
 import { MAPBOX_PUBLIC_KEY } from "~/config";
-import { MAPBOX_STYLE } from "./styles";
+import { MAPBOX_STYLE } from "./mapstyles";
 
 interface MapState extends Partial<ViewState> {
   zoom: number;
