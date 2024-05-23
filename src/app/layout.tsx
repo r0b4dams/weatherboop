@@ -5,6 +5,7 @@ import { type PropsWithChildren } from "react";
 import { type Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "~/components/ui/toaster";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <ClerkProvider>
         <body className={`${roboto.className} antialiased`}>
           <main className="min-h-screen">{children}</main>
+          <Toaster />
         </body>
       </ClerkProvider>
     </html>

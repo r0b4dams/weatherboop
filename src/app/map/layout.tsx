@@ -1,11 +1,11 @@
 import { type PropsWithChildren } from "react";
 
-import { UI } from "~/components";
+import { UserInterface } from "~/components/UserInterface";
 
 export default function MapPageLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <UI />
+      <UserInterface />
       {children}
     </>
   );
