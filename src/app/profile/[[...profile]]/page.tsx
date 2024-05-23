@@ -1,25 +1,22 @@
 "use client";
 
-import { UserProfile, useAuth } from "@clerk/nextjs";
+import { UserProfile } from "@clerk/nextjs";
 
-import { deleteUser } from "./_actions";
-import { CloseIcon } from "~/components/CloseIcon";
+import { DeleteAccountDialog } from "~/components/DeleteAccountDialog";
+import { X } from "lucide-react";
+
+const DeletePageContent = () => {
+  return (
+    <>
+      <h1 className="cl-headerTitle pb-4 font-bold">Delete account</h1>
+      <div className="cl-profileSection py-4 border-t">
+        <DeleteAccountDialog />
+      </div>
+    </>
+  );
+};
 
 const UserProfilePage = () => {
-  const { userId, sessionId } = useAuth();
-
-  const handleDelete = async () => {
-    if (!userId) {
-      return;
-    }
-    try {
-      await deleteUser(userId, sessionId);
-      window.location.replace("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="h-screen w-full flex justify-center items-center">
       <UserProfile
@@ -29,11 +26,12 @@ const UserProfilePage = () => {
           elements: { profileSection__danger: "hidden" },
         }}
       >
-        <UserProfile.Page label="Delete" labelIcon={<CloseIcon />} url="delete">
-          {/* TODO: add dialog to prompt user if they are sure */}
-          <div>
-            <button onClick={handleDelete}>Delete Account</button>
-          </div>
+        <UserProfile.Page
+          label="Delete"
+          labelIcon={<X className="w-4 h-4" />}
+          url="delete"
+        >
+          <DeletePageContent />
         </UserProfile.Page>
       </UserProfile>
     </div>
