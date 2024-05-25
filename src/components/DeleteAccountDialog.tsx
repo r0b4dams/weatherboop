@@ -3,6 +3,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { LoaderCircle } from "lucide-react";
+
 import {
   Dialog,
   DialogClose,
@@ -23,9 +24,9 @@ const DELETE_ACCOUNT = "Delete account";
 
 export function DeleteAccountDialog() {
   const { userId, sessionId } = useAuth();
-  const { toast } = useToast();
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const { toast } = useToast();
 
   const canSubmit = text === DELETE_ACCOUNT;
 
@@ -56,13 +57,11 @@ export function DeleteAccountDialog() {
       window.location.replace("/");
     } catch (error) {
       setIsDeleting(false);
-      if (error instanceof Error) {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "Unable to delete account",
-        });
-      }
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Unable to delete account",
+      });
     }
   };
 

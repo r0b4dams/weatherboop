@@ -41,6 +41,8 @@ export function Mapbox() {
     longitude: 0,
   });
 
+  // return <div>MAP</div>;
+
   const handleMapLoaded = () => {
     setReady(true);
   };

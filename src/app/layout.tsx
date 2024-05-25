@@ -20,9 +20,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <ClerkProvider>
+      <ClerkProvider
+        appearance={{
+          elements: {
+            modalContent: "m-auto",
+            userButtonPopoverFooter: "hidden",
+          },
+        }}
+      >
         <body className={`${roboto.className} antialiased`}>
-          <main className="min-h-screen">{children}</main>
+          <main className="flex min-h-screen">{children}</main>
           <Toaster />
         </body>
       </ClerkProvider>
