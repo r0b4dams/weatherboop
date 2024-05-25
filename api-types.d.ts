@@ -26,7 +26,7 @@ namespace OWM {
   /**
    * https://openweathermap.org/current#fields_json
    */
-  interface WeatherResponse {
+  interface WeatherResponseData {
     /** Response code */
     cod: number;
     coord: {
