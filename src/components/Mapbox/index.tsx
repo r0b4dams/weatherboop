@@ -12,6 +12,7 @@ import Map, {
 
 import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MAPBOX_STYLE } from "./mapstyles";
+import { MapboxLoader } from "~/components/MapboxLoader";
 import { getCurrentWeather } from "~/lib/actions";
 import type { Units, Coordinates } from "~/lib/schema";
 
@@ -51,11 +52,7 @@ export function Mapbox() {
 
   return (
     <>
-      {!mapReady && (
-        <div className="absolute top-0 right-0 bottom-0 left-0 z-50 bg-slate-400">
-          <p className="m-auto">LOADING</p>
-        </div>
-      )}
+      {!mapReady && <MapboxLoader />}
 
       <Map
         reuseMaps
