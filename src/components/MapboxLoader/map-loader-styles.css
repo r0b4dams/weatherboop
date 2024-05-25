@@ -1,30 +1,27 @@
-.mapbox-loader {
-  width: 50px;
+/* HTML: <div class="loader"></div> */
+.map-loader {
+  width: 70px;
   aspect-ratio: 1;
-  display: grid;
-}
-.mapbox-loader::before,
-.mapbox-loader::after {
-  content: "";
-  grid-area: 1/1;
-  --c: no-repeat radial-gradient(farthest-side, #25b09b 92%, #0000);
   background:
-    var(--c) 50% 0,
-    var(--c) 50% 100%,
-    var(--c) 100% 50%,
-    var(--c) 0 50%;
-  background-size: 12px 12px;
-  animation: l12 1s infinite;
+    radial-gradient(farthest-side,#ffa516 90%,#0000) center/16px 16px,
+    radial-gradient(farthest-side,green   90%,#0000) bottom/12px 12px;
+  background-repeat: no-repeat;
+  animation: orbit 1s infinite linear;
+  position: relative;
 }
-.map-loader::before {
-  margin: 4px;
-  filter: hue-rotate(45deg);
-  background-size: 8px 8px;
-  animation-timing-function: linear;
+.map-loader::before {    
+  content:"";
+  position: absolute;
+  width: 8px;
+  aspect-ratio: 1;
+  inset: auto 0 16px;
+  margin: auto;
+  background: #ccc;
+  border-radius: 50%;
+  transform-origin: 50% calc(100% + 10px);
+  animation: inherit;
+  animation-duration: 0.5s;
 }
-
-@keyframes l12 {
-  100% {
-    transform: rotate(0.5turn);
-  }
+@keyframes orbit { 
+  100%{transform: rotate(1turn)}
 }
