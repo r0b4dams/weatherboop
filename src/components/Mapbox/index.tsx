@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import "./mapbox-styles.css";
 
+import { useRef, useState } from "react";
 import Map, {
-  type LngLatLike,
   type MapRef,
   type MapLayerMouseEvent,
   type ViewState,
@@ -12,6 +12,8 @@ import Map, {
 
 import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MAPBOX_STYLE } from "./mapstyles";
+import { getCurrentWeather } from "~/lib/actions";
+import type { Units, Coordinates } from "~/lib/schema";
 
 interface MapState extends Partial<ViewState> {
   zoom: number;
@@ -19,32 +21,18 @@ interface MapState extends Partial<ViewState> {
   longitude: number;
 }
 
-async function getCurrentWeather(coords: [number, number], units: string) {
-  const params = new URLSearchParams({
-    lon: coords[0].toString(),
-    lat: coords[1].toString(),
-    units,
-  });
-  const url = `/api/boop?${params.toString()}`;
-  return fetch(url).then((res) => res.json());
-}
-
 export function Mapbox() {
   const mapRef = useRef<MapRef>(null);
-  const [ready, setReady] = useState(false);
-
-  const [units, setUnits] = useState<"metric" | "imperial">("imperial");
-
+  const [mapReady, setMapReady] = useState(false);
+  const [units, setUnits] = useState<Units>("imperial");
   const [viewState, setViewState] = useState<MapState>({
     zoom: 2,
     latitude: 0,
     longitude: 0,
   });
 
-  // return <div>MAP</div>;
-
   const handleMapLoaded = () => {
-    setReady(true);
+    setMapReady(true);
   };
 
   const handleMapMove = (e: ViewStateChangeEvent) => {
@@ -55,15 +43,15 @@ export function Mapbox() {
     if (!mapRef.current) {
       return;
     }
-    const coords: LngLatLike = [e.lngLat.lng, e.lngLat.lat];
-    mapRef.current.flyTo({ center: coords, speed: 0.25 });
-    const data = await getCurrentWeather(coords, units);
+    const coordinates: Coordinates = [e.lngLat.lng, e.lngLat.lat];
+    mapRef.current.flyTo({ center: coordinates, speed: 0.25 });
+    const data = await getCurrentWeather({ coordinates, units });
     console.log(data);
   };
 
   return (
     <>
-      {!ready && (
+      {!mapReady && (
         <div className="absolute top-0 right-0 bottom-0 left-0 z-50 bg-slate-400">
           <p className="m-auto">LOADING</p>
         </div>
