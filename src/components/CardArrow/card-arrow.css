@@ -1,0 +1,7 @@
+.arrow-up {
+  clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+}
+
+.arrow-down {
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
