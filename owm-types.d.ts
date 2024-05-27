@@ -1,15 +1,4 @@
 namespace OWM {
-  interface GeoItem {
-    name: string;
-    state?: string;
-    country: string;
-    local_names?: Record<string, string>;
-    lat: number;
-    lon: number;
-  }
-
-  type GeoResponse = GeoItem[];
-
   interface WeatherItem {
     /** Weather condition id */
     id: number;
@@ -92,4 +81,15 @@ namespace OWM {
     /** Shift in seconds from UTC  */
     timezone: number;
   }
+
+  interface GeoItem {
+    name: string;
+    state?: string;
+    country: string;
+    local_names?: Record<string, string>;
+    lat: number;
+    lon: number;
+  }
+
+  type GeoResponse = GeoItem[];
 }
