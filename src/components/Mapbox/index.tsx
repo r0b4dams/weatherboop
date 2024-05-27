@@ -1,10 +1,9 @@
-"use client";
-
 import "./mapbox-styles.css";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Map, {
-  type MapRef,
+  useMap,
+  Marker,
   type MapLayerMouseEvent,
   type ViewState,
   type ViewStateChangeEvent,
@@ -15,6 +14,7 @@ import { MAPBOX_STYLE } from "./mapstyles";
 import { MapboxLoader } from "~/components/MapboxLoader";
 import { getCurrentWeather } from "~/lib/actions";
 import type { Units, Coordinates } from "~/lib/schema";
+import { WeatherCard } from "../WeatherCard";
 
 interface MapState extends Partial<ViewState> {
   zoom: number;
@@ -22,32 +22,51 @@ interface MapState extends Partial<ViewState> {
   longitude: number;
 }
 
+interface CurrentWeather {
+  temp: number;
+  humidity: number;
+  pressure: number;
+  weather: OWM.WeatherItem[];
+}
+
 export function Mapbox() {
-  const mapRef = useRef<MapRef>(null);
+  const { map } = useMap();
   const [mapReady, setMapReady] = useState(false);
   const [units, setUnits] = useState<Units>("imperial");
-  const [viewState, setViewState] = useState<MapState>({
+  const [mapView, setMapView] = useState<MapState>({
     zoom: 2,
     latitude: 0,
     longitude: 0,
   });
+  const [marker, setMarker] = useState({
+    show: false,
+    latitude: 0,
+    longitude: 0,
+  });
+  const [current, setCurrent] = useState<CurrentWeather | null>(null);
 
   const handleMapLoaded = () => {
-    setMapReady(true);
+    setTimeout(() => {
+      setMapReady(true);
+    }, 1500);
   };
 
   const handleMapMove = (e: ViewStateChangeEvent) => {
-    setViewState(e.viewState);
+    setMapView(e.viewState);
   };
 
   const handleMapClick = async (e: MapLayerMouseEvent) => {
-    if (!mapRef.current) {
+    if (!map) {
       return;
     }
-    const coordinates: Coordinates = [e.lngLat.lng, e.lngLat.lat];
-    mapRef.current.flyTo({ center: coordinates, speed: 0.25 });
+    setCurrent(null);
+    const { lng, lat } = e.lngLat.wrap();
+    const coordinates = [lng, lat] satisfies Coordinates;
+    setMarker({ show: true, latitude: lat, longitude: lng });
+    map.easeTo({ center: coordinates });
     const data = await getCurrentWeather({ coordinates, units });
     console.log(data);
+    setCurrent(data as CurrentWeather);
   };
 
   return (
@@ -55,15 +74,31 @@ export function Mapbox() {
       {!mapReady && <MapboxLoader />}
 
       <Map
+        id="map"
         reuseMaps
-        ref={mapRef}
         mapboxAccessToken={MAPBOX_PUBLIC_KEY}
         mapStyle={MAPBOX_STYLE.OUTDOORS}
         onMove={handleMapMove}
         onClick={handleMapClick}
         onLoad={handleMapLoaded}
-        {...viewState}
-      ></Map>
+        {...mapView}
+      >
+        {marker.show && current && (
+          <Marker
+            latitude={marker.latitude}
+            longitude={marker.longitude}
+            anchor="bottom"
+          >
+            <WeatherCard
+              units={units}
+              temp={current.temp}
+              weather={current.weather}
+              humidity={current.humidity}
+              pressure={current.pressure}
+            />
+          </Marker>
+        )}
+      </Map>
     </>
   );
 }
