@@ -1,0 +1,46 @@
+{
+  "coord": {
+    "lon": -148.6451,
+    "lat": 61.0803
+  },
+  "weather": [
+    {
+      "id": 804,
+      "main": "Clouds",
+      "description": "overcast clouds",
+      "icon": "04d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 43.43,
+    "feels_like": 42.1,
+    "temp_min": 43.41,
+    "temp_max": 45.16,
+    "pressure": 1003,
+    "humidity": 86,
+    "sea_level": 1003,
+    "grnd_level": 915
+  },
+  "visibility": 2068,
+  "wind": {
+    "speed": 3.13,
+    "deg": 136,
+    "gust": 3.33
+  },
+  "clouds": {
+    "all": 99
+  },
+  "dt": 1716674643,
+  "sys": {
+    "type": 1,
+    "id": 7813,
+    "country": "US",
+    "sunrise": 1716641042,
+    "sunset": 1716706770
+  },
+  "timezone": -28800,
+  "id": 5879267,
+  "name": "Alyeska",
+  "cod": 200
+}

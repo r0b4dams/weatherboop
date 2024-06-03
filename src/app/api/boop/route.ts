@@ -1,11 +1,16 @@
 import { type NextRequest } from "next/server";
 
-import { OPENWEATHERMAP_APPID } from "~/config";
-import { getWeather } from "./helpers";
+import { getCurrentWeather } from "~/lib/actions";
+import { WeatherSearch } from "~/lib/schema";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  searchParams.append("appid", OPENWEATHERMAP_APPID);
-  const weather = await getWeather(searchParams.toString());
+  const coordinates = [
+    parseFloat(searchParams.get("lon")!),
+    parseFloat(searchParams.get("lat")!),
+  ];
+  const units = searchParams.get("units")!;
+  const search = { coordinates, units } as WeatherSearch;
+  const weather = await getCurrentWeather(search);
   return Response.json(weather);
 }

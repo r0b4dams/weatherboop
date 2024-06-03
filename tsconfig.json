@@ -23,7 +23,7 @@
   },
   "include": [
     "next-env.d.ts",
-    "api-types.d.ts",
+    "owm-types.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
