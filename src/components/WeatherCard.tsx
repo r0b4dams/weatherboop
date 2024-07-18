@@ -9,7 +9,7 @@ function getIconLink(icon: string) {
   return `https://openweathermap.org/img/wn/${icon}@2x.png`;
 }
 
-function getTempUnitSymbol(units: Units = "standard") {
+function getTempSymbol(units: Units = "standard") {
   return TEMP_UNITS[units];
 }
 
@@ -47,7 +47,7 @@ export function WeatherCard(props: WeatherCardProps) {
             />
             <p>
               {props.temp}{" "}
-              <span className="font-thin">{getTempUnitSymbol(props.units)}</span>
+              <span className="font-thin">{getTempSymbol(props.units)}</span>
             </p>
           </div>
           <div className="flex items-center">
