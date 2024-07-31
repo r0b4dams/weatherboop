@@ -12,9 +12,10 @@ import Map, {
 import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MAPBOX_STYLE } from "./mapstyles";
 import { MapboxLoader } from "~/components/MapboxLoader";
+import { WeatherCard } from "../WeatherCard";
 import { getCurrentWeather } from "~/lib/actions";
 import type { Units, Coordinates } from "~/lib/schema";
-import { WeatherCard } from "../WeatherCard";
+import type { IDateTime } from "~/lib/utils";
 
 interface MapState extends Partial<ViewState> {
   zoom: number;
@@ -27,6 +28,7 @@ interface CurrentWeather {
   humidity: number;
   pressure: number;
   weather: OWM.WeatherItem[];
+  dt: IDateTime;
 }
 
 export function Mapbox() {
@@ -95,6 +97,7 @@ export function Mapbox() {
               weather={current.weather}
               humidity={current.humidity}
               pressure={current.pressure}
+              dt={current.dt}
             />
           </Marker>
         )}
