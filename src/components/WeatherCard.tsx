@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { CardArrow } from "./CardArrow";
 import { type Units } from "~/lib/schema";
-import { TEMP_UNITS } from "~/lib/utils";
+import { IDateTime, TEMP_UNITS } from "~/lib/utils";
 
 function getIconLink(icon: string) {
   return `https://openweathermap.org/img/wn/${icon}@2x.png`;
@@ -19,14 +19,17 @@ interface WeatherCardProps {
   humidity: number;
   pressure: number;
   weather: OWM.WeatherItem[];
+  dt: IDateTime;
 }
 
 export function WeatherCard(props: WeatherCardProps) {
+  const time = `${props.dt.time.hour}:${props.dt.time.minute}`;
   return (
     <div className="flex flex-col items-center">
       <Card className="border-0 w-fit">
         {/* <CardTitle className="p-2 pb-0">boop!</CardTitle> */}
         <CardContent className="p-2 pt-0">
+          <div>Local time: {time}</div>
           {props.weather.map((w: any) => (
             <div key={w.id} className="flex items-center">
               <Image
