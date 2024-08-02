@@ -15,7 +15,7 @@ import { MapboxLoader } from "~/components/MapboxLoader";
 import { WeatherCard } from "~/components/WeatherCard";
 import { getCurrentWeather } from "~/lib/actions";
 import type { Coordinates } from "~/lib/schema";
-import type { IDateTime } from "~/lib/utils";
+import type { IDateTime } from "~/lib/schema";
 
 interface MapState extends Partial<ViewState> {
   zoom: number;

@@ -2,8 +2,8 @@ import Image from "next/image";
 
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { CardArrow } from "./CardArrow";
-import { type Units } from "~/lib/schema";
-import { renderTime, TEMP_UNITS, type IDateTime, type ITime } from "~/lib/utils";
+import { IDateTime, type Units } from "~/lib/schema";
+import { renderTime, TEMP_UNITS } from "~/lib/utils";
 import { useStore } from "~/lib/store";
 
 function getIconLink(icon: string) {
