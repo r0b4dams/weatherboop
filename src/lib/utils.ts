@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
-import { type ClassValue, clsx } from "clsx";
-import { type TimeFormat } from "./schema";
+import { clsx, type ClassValue } from "clsx";
+
+import { type ITime, type IDateTime, type TimeFormat } from "./schema";
 
 export const TEMP_UNITS = {
   standard: "K",
@@ -16,27 +17,6 @@ export const WIND_SPEED_UNITS = {
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export interface IDate {
-  weekday: string;
-  day: string;
-  month: string;
-  year: string;
-}
-
-/**
- * 24-hour format
- */
-export interface ITime {
-  hour: string;
-  minute: string;
-  second: string;
-}
-
-export interface IDateTime {
-  date: IDate;
-  time: ITime;
 }
 
 export function formatCurrentWeather(current: OWM.WeatherResponseData) {

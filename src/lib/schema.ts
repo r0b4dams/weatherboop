@@ -18,3 +18,24 @@ export const unitSchema = z.enum(["standard", "metric", "imperial"]);
 
 export type WeatherSearch = z.infer<typeof searchSchema>;
 export const searchSchema = z.object({ coordinates: coordSchema, units: unitSchema });
+
+export interface IDate {
+  weekday: string;
+  day: string;
+  month: string;
+  year: string;
+}
+
+/**
+ * 24-hour format
+ */
+export interface ITime {
+  hour: string;
+  minute: string;
+  second: string;
+}
+
+export interface IDateTime {
+  date: IDate;
+  time: ITime;
+}
