@@ -2,12 +2,12 @@
 
 import { MapProvider } from "react-map-gl";
 import { Mapbox } from "~/components/Mapbox";
-import { UserInterface } from "~/components/UserInterface";
+import { UI } from "~/components/UI";
 
 export default function MapPage() {
   return (
     <MapProvider>
-      <UserInterface />
+      <UI />
       <Mapbox />
     </MapProvider>
   );
