@@ -18,10 +18,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-
-
 export interface IDate {
-  weekday: string
+  weekday: string;
   day: string;
   month: string;
   year: string;
@@ -37,8 +35,8 @@ export interface ITime {
 }
 
 export interface IDateTime {
-  date: IDate,
-  time: ITime
+  date: IDate;
+  time: ITime;
 }
 
 export function formatCurrentWeather(current: OWM.WeatherResponseData) {
@@ -52,21 +50,23 @@ export function formatCurrentWeather(current: OWM.WeatherResponseData) {
 }
 
 function getDateTime(dt: number, offset: number): IDateTime {
-  const [weekday, day, month, year, time] = new Date((dt + offset) * 1000).toUTCString().split(" ")
-  const [hour, minute, second] = time.split(":")
+  const [weekday, day, month, year, time] = new Date((dt + offset) * 1000)
+    .toUTCString()
+    .split(" ");
+  const [hour, minute, second] = time.split(":");
   return {
     date: {
       weekday: weekday.substring(0, weekday.length - 1),
       day,
       month,
-      year
+      year,
     },
     time: {
       hour,
       minute,
-      second
-    }
-  }
+      second,
+    },
+  };
 }
 
 export function renderTime({ hour, minute }: ITime, format: TimeFormat) {

@@ -10,8 +10,8 @@ export const coordSchema = z.tuple([
   z.number().min(-90).max(90),
 ]);
 
-export type TimeFormat = z.infer<typeof timeSchema>
-export const timeSchema = z.enum(["12", "24"])
+export type TimeFormat = z.infer<typeof timeSchema>;
+export const timeSchema = z.enum(["12", "24"]);
 
 export type Units = z.infer<typeof unitSchema>;
 export const unitSchema = z.enum(["standard", "metric", "imperial"]);
