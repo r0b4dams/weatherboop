@@ -12,9 +12,9 @@ import Map, {
 import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MAPBOX_STYLE } from "./mapstyles";
 import { MapboxLoader } from "~/components/MapboxLoader";
-import { WeatherCard } from "../WeatherCard";
+import { WeatherCard } from "~/components/WeatherCard";
 import { getCurrentWeather } from "~/lib/actions";
-import type { Units, Coordinates } from "~/lib/schema";
+import type { Coordinates } from "~/lib/schema";
 import type { IDateTime } from "~/lib/utils";
 
 interface MapState extends Partial<ViewState> {
@@ -34,7 +34,6 @@ interface CurrentWeather {
 export function Mapbox() {
   const { map } = useMap();
   const [mapReady, setMapReady] = useState(false);
-  const [units, setUnits] = useState<Units>("imperial");
   const [mapView, setMapView] = useState<MapState>({
     zoom: 2,
     latitude: 0,
@@ -48,9 +47,7 @@ export function Mapbox() {
   const [current, setCurrent] = useState<CurrentWeather | null>(null);
 
   const handleMapLoaded = () => {
-    setTimeout(() => {
-      setMapReady(true);
-    }, 1500);
+    setTimeout(() => setMapReady(true), 1500);
   };
 
   const handleMapMove = (e: ViewStateChangeEvent) => {
@@ -66,7 +63,7 @@ export function Mapbox() {
     const coordinates = [lng, lat] satisfies Coordinates;
     setMarker({ show: true, latitude: lat, longitude: lng });
     map.easeTo({ center: coordinates });
-    const data = await getCurrentWeather({ coordinates, units });
+    const data = await getCurrentWeather({ coordinates, units: "imperial" });
     console.log(data);
     setCurrent(data as CurrentWeather);
   };
@@ -87,12 +84,12 @@ export function Mapbox() {
       >
         {marker.show && current && (
           <Marker
+            anchor="bottom"
             latitude={marker.latitude}
             longitude={marker.longitude}
-            anchor="bottom"
           >
             <WeatherCard
-              units={units}
+              units={"imperial"}
               temp={current.temp}
               weather={current.weather}
               humidity={current.humidity}
