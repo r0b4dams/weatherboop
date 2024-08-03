@@ -1,6 +1,6 @@
 import "./mapbox-styles.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Map, {
   useMap,
   Marker,
@@ -9,10 +9,11 @@ import Map, {
   type ViewStateChangeEvent,
 } from "react-map-gl";
 
-import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MAPBOX_STYLE } from "./mapstyles";
+import { MAPBOX_PUBLIC_KEY } from "~/config";
 import { MapboxLoader } from "~/components/MapboxLoader";
 import { WeatherCard } from "~/components/WeatherCard";
+import { useStore } from "~/lib/store";
 import { getCurrentWeather } from "~/lib/actions";
 import type { Coordinates } from "~/lib/schema";
 import type { IDateTime } from "~/lib/schema";
@@ -45,6 +46,17 @@ export function Mapbox() {
     longitude: 0,
   });
   const [current, setCurrent] = useState<CurrentWeather | null>(null);
+  const units = useStore((state) => state.units);
+
+  useEffect(() => {
+    if (!marker.show) {
+      return;
+    }
+    const coordinates = [marker.longitude, marker.latitude] satisfies Coordinates;
+    getCurrentWeather({ coordinates, units }).then((data) => {
+      setCurrent(data as CurrentWeather);
+    });
+  }, [units]);
 
   const handleMapLoaded = () => {
     setTimeout(() => setMapReady(true), 1500);
@@ -63,7 +75,7 @@ export function Mapbox() {
     const coordinates = [lng, lat] satisfies Coordinates;
     setMarker({ show: true, latitude: lat, longitude: lng });
     map.easeTo({ center: coordinates });
-    const data = await getCurrentWeather({ coordinates, units: "imperial" });
+    const data = await getCurrentWeather({ coordinates, units });
     console.log(data);
     setCurrent(data as CurrentWeather);
   };
@@ -89,7 +101,6 @@ export function Mapbox() {
             longitude={marker.longitude}
           >
             <WeatherCard
-              units={"imperial"}
               temp={current.temp}
               weather={current.weather}
               humidity={current.humidity}
