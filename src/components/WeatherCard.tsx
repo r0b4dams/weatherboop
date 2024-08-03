@@ -15,7 +15,6 @@ function getTempSymbol(units: Units = "standard") {
 }
 
 interface WeatherCardProps {
-  units?: Units;
   temp: number;
   humidity: number;
   pressure: number;
@@ -24,12 +23,15 @@ interface WeatherCardProps {
 }
 
 export function WeatherCard(props: WeatherCardProps) {
-  const timeFormat = useStore((state) => state.timeFormat);
+  const { timeFormat, units } = useStore((state) => ({
+    timeFormat: state.timeFormat,
+    units: state.units,
+  }));
 
   return (
     <div className="flex flex-col items-center">
       <Card className="border-0 w-fit">
-        {/* <CardTitle className="p-2 pb-0">boop!</CardTitle> */}
+        <CardTitle className="p-2 pb-0">boop!</CardTitle>
         <CardContent className="p-2 pt-0">
           <div>Local time: {renderTime(props.dt.time, timeFormat)}</div>
           {props.weather.map((w: any) => (
@@ -51,8 +53,7 @@ export function WeatherCard(props: WeatherCardProps) {
               alt="thermometer icon"
             />
             <p>
-              {props.temp}{" "}
-              <span className="font-thin">{getTempSymbol(props.units)}</span>
+              {props.temp} <span className="font-thin">{getTempSymbol(units)}</span>
             </p>
           </div>
           <div className="flex items-center">
