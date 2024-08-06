@@ -20,8 +20,8 @@ export function UI() {
   };
 
   return (
-    <div className="absolute z-10 right-5 top-5 flex flex-col items-center">
-      <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
+    <div className="absolute z-10 right-5 top-5 flex flex-col items-center space-y-3">
+      <UserButton />
       <Button onClick={handleSetTimeFormat}>Time format: {timeFormat}</Button>
       <Button onClick={handleSetUnits}>Units: {units}</Button>
     </div>
